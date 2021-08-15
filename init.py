@@ -39,8 +39,6 @@ y = np.array(df['label'])
 X_train, X_test, y_train, y_test = model_selection.train_test_split(
     X, y, test_size=0.2)
 
-#   
-
 pickle_in = open('linearregression.pickle', 'rb')
 clf = pickle.load(pickle_in)
 

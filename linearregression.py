@@ -1,12 +1,27 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import style
+import random
 
 style.use('fivethirtyeight')
 
-xs = np.array([1, 2, 3, 4, 5, 6], dtype=np.float64)
-ys = np.array([5, 4, 6, 5, 6, 7], dtype=np.float64)
+# xs = np.array([1, 2, 3, 4, 5, 6], dtype=np.float64)
+# ys = np.array([5, 4, 6, 5, 6, 7], dtype=np.float64)
 
+def setDataset(n, variance, step = 2, correlation = False):
+    val = 1
+    ys = []
+    for i in range(n):
+        y = val + random.randrange(-variance, variance)
+        ys.append(y)
+        if correlation and correlation == 'pos':
+            val += step
+        elif correlation and correlation == 'neg':
+            val -= step
+    
+    xs = [i for i in range(len(ys))]
+
+    return np.array(xs, dtype=np.float64), np.array(ys, dtype=np.float64)
 
 def getBestFitLine(xs, ys):
     #   getBestFitLine return m, b
@@ -28,6 +43,8 @@ def getRsq(origLine, regLine):
     sqErrorMeanLine = sqError(origLine, meanLine)
     return 1 - (sqErrorRegLine / sqErrorMeanLine)
 
+xs, ys = setDataset(40, 80, 2, 'pos')
+
 m, b = getBestFitLine(xs, ys)
 
 regLine = [(m*x) + b for x in xs]
@@ -38,7 +55,7 @@ y_predict = (m*x_predict) + b
 r_squared = getRsq(ys, regLine)
 print(r_squared)
 
-plt.scatter(xs, ys)
-plt.scatter(x_predict, y_predict, color="g")
 plt.plot(xs, regLine)
+plt.scatter(xs, ys)
+plt.scatter(x_predict, y_predict, s= 100, color="g")
 plt.show()
